@@ -18,6 +18,10 @@ public class Database {
     private Database(@JsonProperty("users") final ArrayList<User> users,
                     @JsonProperty("movies") final ArrayList<Movie> movies,
                     @JsonProperty("actions") final ArrayList<Action> actions) {
+        if (instance != null) {
+            System.err.println("Multiple Instances of Database");
+            System.exit(-1);
+        }
         instance = this;
         this.users = users;
         this.movies = movies;
