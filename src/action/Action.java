@@ -1,60 +1,79 @@
 package action;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import user.Credentials;
 
 public class Action {
-    private String type;
-    private String page;
-    private String feature;
-    private Filter filter;
-    private Credentials credentials;
+    private final String type;
+    private final String page;
+    private final String feature;
+    private final Filter filters;
+    private final Credentials credentials;
+    private final String movie;
+    private final int count;
+    private final String startsWith;
+    private final String objectType;
     private double rate;
+
+    @JsonCreator
+    private Action(@JsonProperty("type") final String type,
+                   @JsonProperty("page") final String page,
+                   @JsonProperty("feature") final String feature,
+                   @JsonProperty("filters") final Filter filters,
+                   @JsonProperty("credentials") final Credentials credentials,
+                   @JsonProperty("movie") final String movies,
+                   @JsonProperty("count") final int count,
+                   @JsonProperty("startsWith") final String startsWith,
+                   @JsonProperty("objectType") final String objectType) {
+        this.type = type;
+        this.page = page;
+        this.feature = feature;
+        this.filters = filters;
+        this.credentials = credentials;
+        this.movie = movies;
+        this.count = count;
+        this.startsWith = startsWith;
+        this.objectType = objectType;
+    }
 
     public String getType() {
         return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getPage() {
         return page;
     }
 
-    public void setPage(String page) {
-        this.page = page;
-    }
-
     public String getFeature() {
         return feature;
-    }
-
-    public void setFeature(String feature) {
-        this.feature = feature;
     }
 
     public Credentials getCredentials() {
         return credentials;
     }
 
-    public void setCredentials(Credentials credentials) {
-        this.credentials = credentials;
+    public Filter getFilters() {
+        return filters;
     }
 
-    public Filter getFilter() {
-        return filter;
+    public String getMovie() {
+        return movie;
     }
 
-    public void setFilter(Filter filter) {
-        this.filter = filter;
+    public int getCount() {
+        return count;
+    }
+
+    public String getStartsWith() {
+        return startsWith;
+    }
+
+    public String getObjectType() {
+        return objectType;
     }
 
     public double getRate() {
         return rate;
-    }
-
-    public void setRate(double rate) {
-        this.rate = rate;
     }
 }

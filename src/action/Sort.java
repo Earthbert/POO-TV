@@ -1,22 +1,24 @@
 package action;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Sort {
-    private String rating;
-    private String duration;
+    private final String rating;
+    private final String duration;
+
+    @JsonCreator
+    private Sort(@JsonProperty("rating") final String rating,
+                @JsonProperty("duration") final String duration) {
+        this.rating = rating;
+        this.duration = duration;
+    }
 
     public String getRating() {
         return rating;
     }
 
-    public void setRating(String rating) {
-        this.rating = rating;
-    }
-
     public String getDuration() {
         return duration;
-    }
-
-    public void setDuration(String duration) {
-        this.duration = duration;
     }
 }

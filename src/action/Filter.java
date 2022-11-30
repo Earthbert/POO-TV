@@ -1,22 +1,25 @@
 package action;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Filter {
-    private Sort sort;
-    private Contains contains;
+    private final Sort sort;
+    private final Contains contains;
+
+    @JsonCreator
+    private Filter(@JsonProperty("sort") final Sort sort,
+                   @JsonProperty("contains") final Contains contains) {
+        this.sort = sort;
+        this.contains = contains;
+    }
 
     public Sort getSort() {
         return sort;
     }
 
-    public void setSort(Sort sort) {
-        this.sort = sort;
-    }
 
     public Contains getContains() {
         return contains;
-    }
-
-    public void setContains(Contains contains) {
-        this.contains = contains;
     }
 }

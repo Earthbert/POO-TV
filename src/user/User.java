@@ -1,11 +1,13 @@
 package user;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import movie.Movie;
 
 import java.util.ArrayList;
 
 public class User {
-    private Credentials credentials;
+    private final Credentials credentials;
     private int tokensCount;
     private int numFreePremiumMovies;
     private ArrayList<Movie> purchasedMovies;
@@ -13,11 +15,12 @@ public class User {
     private ArrayList<Movie> likedMovies;
     private ArrayList<Movie> ratedMovies;
 
-    public Credentials getCredentials() {
-        return credentials;
+    @JsonCreator
+    private User(@JsonProperty("credentials") final Credentials credentials) {
+        this.credentials = credentials;
     }
 
-    public void setCredentials(Credentials credentials) {
-        this.credentials = credentials;
+    public Credentials getCredentials() {
+        return credentials;
     }
 }
