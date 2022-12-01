@@ -5,8 +5,10 @@ import action.Filter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import database.Database;
 import movie.Movie;
+import movie.MovieList;
 import user.Credentials;
 import user.User;
+import user.UserAction;
 import utils.Page;
 
 import java.util.List;
@@ -52,7 +54,7 @@ public class Execution {
         private void logout() {
             if (Page.hasLinkTo(currentPage, "logout")) {
                 currentPage = "logout";
-                currentUser =  null;
+                currentUser = null;
                 currentMovies = null;
             } else {
                 outputWriter.write();
@@ -86,13 +88,24 @@ public class Execution {
         private void movies() {
             if (Page.hasLinkTo(currentPage, "movies")) {
                 currentPage = "movies";
-                // TODO output movies
+                currentMovies = MovieList.available(Database.getInstance().getMovies(), currentUser);
+                outputWriter.write(currentMovies, currentUser);
             } else {
                 outputWriter.write();
             }
         }
 
-        private void seeDetails(String movieName) {
+        private void seeDetails(final String movieName) {
+            if (Page.hasLinkTo(currentPage, "see details")) {
+                if (MovieList.getMovie(currentMovies, movieName).size() > 0) {
+                    final List<Movie> currentMovie = MovieList.getMovie(currentMovies, movieName);
+                    outputWriter.write(currentMovie, currentUser);
+                } else {
+                    outputWriter.write();
+                }
+            } else {
+                outputWriter.write();
+            }
         }
 
         private void upgrades() {
@@ -106,7 +119,7 @@ public class Execution {
     }
 
     private class OnPageAction {
-        private void handle(Action action) {
+        private void handle(final Action action) {
             switch (action.getFeature()) {
                 case "login" -> login(action.getCredentials());
                 case "register" -> register(action.getCredentials());
@@ -122,10 +135,36 @@ public class Execution {
             }
         }
 
-        private void login(Credentials credentials) {
+        private void login(final Credentials credentials) {
+            if (Page.hasFeature(currentPage, "login")) {
+                final User user = UserAction.login(credentials);
+                if (user != null) {
+                    currentPage = "homepage";
+                    currentUser = user;
+                    outputWriter.write(currentUser);
+                } else {
+                    currentPage = "logout";
+                    outputWriter.write();
+                }
+            } else {
+                outputWriter.write();
+            }
         }
 
         private void register(Credentials credentials) {
+            if (Page.hasFeature(currentPage, "register")) {
+                final User user = UserAction.register(credentials);
+                if (user != null) {
+                    currentPage = "homepage";
+                    currentUser = user;
+                    outputWriter.write(currentUser);
+                } else {
+                    currentPage = "logout";
+                    outputWriter.write();
+                }
+            } else {
+                outputWriter.write();
+            }
         }
 
         private void search(String startsWith) {

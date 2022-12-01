@@ -7,8 +7,8 @@ public class Credentials {
     private final String name;
     private final String password;
     private final String accountType;
-    private final String Country;
-    private final int balance;
+    private final String country;
+    private int balance;
 
     @JsonCreator
     private Credentials(@JsonProperty("name") final String name,
@@ -19,8 +19,16 @@ public class Credentials {
         this.name = name;
         this.password = password;
         this.accountType = accountType;
-        Country = country;
+        this.country = country;
         this.balance = balance;
+    }
+
+    public Credentials(Credentials credentials) {
+        this.name = credentials.name;
+        this.password = credentials.password;
+        this.accountType = credentials.accountType;
+        this.country = credentials.country;
+        this.balance = credentials.balance;
     }
 
     public String getName() {
@@ -36,7 +44,7 @@ public class Credentials {
     }
 
     public String getCountry() {
-        return Country;
+        return country;
     }
 
     public String getBalance() {

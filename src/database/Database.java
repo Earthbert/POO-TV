@@ -7,12 +7,13 @@ import movie.Movie;
 import user.User;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Database {
     private static Database instance;
-    private final ArrayList<User> users;
-    private final ArrayList<Movie> movies;
-    private final ArrayList<Action> actions;
+    private final List<User> users;
+    private final List<Movie> movies;
+    private final List<Action> actions;
 
     @JsonCreator
     private Database(@JsonProperty("users") final ArrayList<User> users,
@@ -32,15 +33,15 @@ public class Database {
         return instance;
     }
 
-    public ArrayList<User> getUsers() {
+    public List<User> getUsers() {
         return users;
     }
 
-    public ArrayList<Movie> getMovies() {
+    public List<Movie> getMovies() {
         return movies;
     }
 
-    public ArrayList<Action> getActions() {
+    public List<Action> getActions() {
         return actions;
     }
 

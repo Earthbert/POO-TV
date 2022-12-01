@@ -1,18 +1,20 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import database.Database;
+import execution.Execution;
+
 import java.io.File;
 import java.io.IOException;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         final ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            objectMapper.readValue(new File(args[0]), Database.class);
-        } catch (final IOException e) {
-            throw new RuntimeException(e);
-        }
-        Database db = Database.getInstance();
-        final ArrayNode output = objectMapper.createArrayNode();
+        objectMapper.readValue(new File(args[0]), Database.class);
+        final ArrayNode arrayNode = objectMapper.createArrayNode();
+        final Execution execution = new Execution(arrayNode);
+        execution.start();
+        final ObjectWriter objectWriter = objectMapper.writerWithDefaultPrettyPrinter();
+        objectWriter.writeValue(new File(args[1]), arrayNode);
     }
 }
