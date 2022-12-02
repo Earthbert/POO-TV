@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class Movie {
     private final String name;
-    private final String year;
+    private final int year;
     private final int duration;
     private final ArrayList<String> genres;
     private final ArrayList<String> actors;
@@ -18,7 +18,7 @@ public class Movie {
 
     @JsonCreator
     private Movie(@JsonProperty("name") final String name,
-                  @JsonProperty("year") final String year,
+                  @JsonProperty("year") final int year,
                   @JsonProperty("duration") final int duration,
                   @JsonProperty("genres") final ArrayList<String> genres,
                   @JsonProperty("actors") final ArrayList<String> actors,
@@ -79,7 +79,7 @@ public class Movie {
         return name;
     }
 
-    public String getYear() {
+    public int getYear() {
         return year;
     }
 
