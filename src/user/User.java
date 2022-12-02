@@ -36,6 +36,70 @@ public class User {
         this.ratedMovies = MovieList.copyMovies(user.ratedMovies);
     }
 
+    public boolean buyTokens(final int count) {
+        if (!credentials.spendBalance(count)) {
+            return false;
+        }
+        this.tokensCount += count;
+        return true;
+    }
+
+    public boolean buyPremiumAccount() {
+        if (tokensCount < 10) {
+            return false;
+        }
+        tokensCount -= 10;
+        credentials.makePremium();
+        return true;
+    }
+
+    public boolean buyMovie(final Movie movie) {
+        if (credentials.isPremium() && numFreePremiumMovies > 0) {
+            purchasedMovies.add(movie);
+            numFreePremiumMovies--;
+            return true;
+        }
+        if (tokensCount >= 2) {
+            purchasedMovies.add(movie);
+            tokensCount -= 2;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean watchMovie(final Movie movie) {
+        if (!purchasedMovies.contains(movie)) {
+            return false;
+        }
+        if (!watchedMovies.contains(movie)) {
+            watchedMovies.add(movie);
+            return true;
+        }
+        return true;
+    }
+
+    public boolean likeMovie(final Movie movie) {
+        if (watchedMovies.contains(movie)) {
+            if (!likedMovies.contains(movie)) {
+                movie.getLiked();
+                likedMovies.add(movie);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public boolean rateMovie(final Movie movie, final int rate) {
+        if (watchedMovies.contains(movie)) {
+            if (!ratedMovies.contains(movie)) {
+                movie.rate(rate);
+                ratedMovies.add(movie);
+            }
+            return true;
+        }
+        return false;
+    }
+
     public Credentials getCredentials() {
         return credentials;
     }

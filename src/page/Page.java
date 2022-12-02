@@ -1,5 +1,6 @@
 package page;
 
+import movie.Movie;
 import user.User;
 
 import java.util.HashMap;
@@ -8,6 +9,7 @@ import java.util.List;
 public class Page {
     private User user;
     private String name;
+    private Movie movie;
 
     public Page(final String name) {
         this.name = name;
@@ -59,5 +61,13 @@ public class Page {
 
     public void setName(final String name) {
         this.name = name;
+    }
+
+    public Movie getMovie() {
+        return movie;
+    }
+
+    public void setMovie(final Movie movie) {
+        this.movie = movie;
     }
 }

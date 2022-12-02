@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Credentials {
     private final String name;
     private final String password;
-    private final String accountType;
+    private String accountType;
     private final String country;
     private int balance;
 
@@ -23,12 +23,31 @@ public class Credentials {
         this.balance = balance;
     }
 
-    public Credentials(Credentials credentials) {
+    public Credentials(final Credentials credentials) {
         this.name = credentials.name;
         this.password = credentials.password;
         this.accountType = credentials.accountType;
         this.country = credentials.country;
         this.balance = credentials.balance;
+    }
+
+    boolean spendBalance(final int count) {
+        if (count > balance)
+            return false;
+        balance -= count;
+        return true;
+    }
+
+    boolean isPremium() {
+        return accountType.equals("premium");
+    }
+
+    void makePremium() {
+        accountType = "premium";
+    }
+
+    public String getAccountType() {
+        return accountType;
     }
 
     public String getName() {
@@ -37,10 +56,6 @@ public class Credentials {
 
     public String getPassword() {
         return password;
-    }
-
-    public String getAccountType() {
-        return accountType;
     }
 
     public String getCountry() {

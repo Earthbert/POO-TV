@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import movie.Movie;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Contains {
     private final List<String> actors;
@@ -22,12 +23,12 @@ public class Contains {
         if (actors != null) {
             filteredMovies = movies.stream()
                 .filter(x -> x.getActors().containsAll(actors))
-                .toList();
+                .collect(Collectors.toList());
         }
         if (genre != null) {
             filteredMovies = filteredMovies.stream()
                 .filter(x -> x.getActors().containsAll(genre))
-                .toList();
+                .collect(Collectors.toList());
         }
         return filteredMovies;
     }

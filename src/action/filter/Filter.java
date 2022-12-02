@@ -21,7 +21,9 @@ public class Filter {
         if (contains != null) {
              movies = contains.apply(movies);
         }
-        sort.apply(movies);
+        if (sort != null) {
+            sort.apply(movies);
+        }
         return movies;
     }
 }

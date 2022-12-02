@@ -1,7 +1,6 @@
 package movie;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
@@ -51,6 +50,10 @@ public class Movie {
         if (obj.getClass() == Movie.class)
             return ((Movie)obj).getName().equals(this.name);
         return false;
+    }
+
+    public void getLiked() {
+        numLikes++;
     }
 
     public void rate(final int rate) {

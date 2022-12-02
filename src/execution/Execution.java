@@ -11,7 +11,7 @@ import user.User;
 import user.UserAction;
 import page.Page;
 
-import java.util.List;
+import java.util.*;
 
 public class Execution {
     private final OutputWriter outputWriter;
@@ -53,6 +53,7 @@ public class Execution {
             if (currentPage.hasLinkTo("logout")) {
                 currentPage.setName("logout");
                 currentPage.setUser(null);
+                currentPage.setMovie(null);
             } else {
                 outputWriter.write();
             }
@@ -61,6 +62,7 @@ public class Execution {
         private void login() {
             if (currentPage.hasLinkTo("login")) {
                 currentPage.setName("login");
+                currentPage.setMovie(null);
             } else {
                 outputWriter.write();
             }
@@ -69,6 +71,7 @@ public class Execution {
         private void register() {
             if (currentPage.hasLinkTo("register")) {
                 currentPage.setName("register");
+                currentPage.setMovie(null);
             } else {
                 outputWriter.write();
             }
@@ -77,6 +80,7 @@ public class Execution {
         private void homepage() {
             if (currentPage.hasLinkTo("homepage")) {
                 currentPage.setName("homepage");
+                currentPage.setMovie(null);
             } else {
                 outputWriter.write();
             }
@@ -85,6 +89,7 @@ public class Execution {
         private void movies() {
             if (currentPage.hasLinkTo("movies")) {
                 currentPage.setName("movies");
+                currentPage.setMovie(null);
                 final List<Movie> currentMovies = MovieList.available(Database.getInstance().getMovies(), currentPage.getUser());
                 outputWriter.write(currentMovies, currentPage.getUser());
             } else {
@@ -95,10 +100,11 @@ public class Execution {
         private void seeDetails(final String movieName) {
             if (currentPage.hasLinkTo("see details")) {
                 final List<Movie> availableMovies = MovieList.available(Database.getInstance().getMovies(), currentPage.getUser());
-                final List<Movie> currentMovie = MovieList.getMovie(availableMovies, movieName);
-                if (currentMovie.size() > 0) {
+                final Optional<Movie> currentMovie = MovieList.getMovie(availableMovies, movieName);
+                if (currentMovie.isPresent()) {
                     currentPage.setName("see details");
-                    outputWriter.write(currentMovie, currentPage.getUser());
+                    currentPage.setMovie(currentMovie.get());
+                    outputWriter.write(List.of(currentMovie.get()), currentPage.getUser());
                 } else {
                     outputWriter.write();
                 }
@@ -110,6 +116,7 @@ public class Execution {
         private void upgrades() {
             if (currentPage.hasLinkTo("upgrades")) {
                 currentPage.setName("upgrades");
+                currentPage.setMovie(null);
             } else {
                 outputWriter.write();
             }
@@ -123,10 +130,10 @@ public class Execution {
                 case "register" -> register(action.getCredentials());
                 case "search" -> search(action.getStartsWith());
                 case "filter" -> filter(action.getFilters());
-                case "purchase" -> purchase(action.getMovie());
-                case "watch" -> watch(action.getMovie());
-                case "like" -> like(action.getMovie());
-                case "rate" -> rate(action.getMovie(), action.getRate());
+                case "purchase" -> purchase();
+                case "watch" -> watch();
+                case "like" -> like();
+                case "rate" -> rate(action.getRate());
                 case "buy premium account" -> buyPremium();
                 case "buy tokens" -> buyTokens(action.getCount());
                 default -> System.err.println("Invalid On Page Action");
@@ -149,7 +156,7 @@ public class Execution {
             }
         }
 
-        private void register(Credentials credentials) {
+        private void register(final Credentials credentials) {
             if (currentPage.hasFeature("register")) {
                 final User user = UserAction.register(credentials);
                 if (user != null) {
@@ -175,7 +182,7 @@ public class Execution {
             }
         }
 
-        private void filter(Filter filter) {
+        private void filter(final Filter filter) {
             if (currentPage.hasFeature("filter")) {
                 final List<Movie> availableMovies = MovieList.available(Database.getInstance().getMovies(), currentPage.getUser());
                 final List<Movie> filteredMovies = filter.apply(availableMovies);
@@ -185,23 +192,56 @@ public class Execution {
             }
         }
 
-        private void purchase(String movie) {
+        private void purchase() {
+            if (currentPage.hasFeature("purchase")) {
+                if (currentPage.getUser().buyMovie(currentPage.getMovie())) {
+                    outputWriter.write(List.of(currentPage.getMovie()), currentPage.getUser());
+                    return;
+                }
+            }
+            outputWriter.write();
         }
 
-        private void watch(String movie) {
+        private void watch() {
+            if (currentPage.hasFeature("watch")) {
+                if (currentPage.getUser().watchMovie(currentPage.getMovie())) {
+                    outputWriter.write(List.of(currentPage.getMovie()), currentPage.getUser());
+                    return;
+                }
+            }
+            outputWriter.write();
         }
 
-        private void like(String movie) {
+        private void like() {
+            if (currentPage.hasFeature("like")) {
+                if (currentPage.getUser().likeMovie(currentPage.getMovie())) {
+                    outputWriter.write(List.of(currentPage.getMovie()), currentPage.getUser());
+                    return;
+                }
+            }
+            outputWriter.write();
         }
 
-        private void rate(String movie, double rate) {
+        private void rate(final int rate) {
+            if (currentPage.hasFeature("rate")) {
+                if (currentPage.getUser().rateMovie(currentPage.getMovie(), rate)) {
+                    outputWriter.write(List.of(currentPage.getMovie()), currentPage.getUser());
+                    return;
+                }
+            }
+            outputWriter.write();
         }
 
         private void buyPremium() {
+            if (!currentPage.hasFeature("buy premium account") || !currentPage.getUser().buyPremiumAccount()) {
+                outputWriter.write();
+            }
         }
 
-        private void buyTokens(int count) {
+        private void buyTokens(final int count) {
+            if (!currentPage.hasFeature("buy tokens") || !currentPage.getUser().buyTokens(count)) {
+                outputWriter.write(currentPage.getUser());
+            }
         }
-
     }
 }

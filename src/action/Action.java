@@ -15,7 +15,7 @@ public class Action {
     private final int count;
     private final String startsWith;
     private final String objectType;
-    private double rate;
+    private final int rate;
 
     @JsonCreator
     private Action(@JsonProperty("type") final String type,
@@ -26,7 +26,8 @@ public class Action {
                    @JsonProperty("movie") final String movies,
                    @JsonProperty("count") final int count,
                    @JsonProperty("startsWith") final String startsWith,
-                   @JsonProperty("objectType") final String objectType) {
+                   @JsonProperty("objectType") final String objectType,
+                   @JsonProperty("rate") final int rate) {
         this.type = type;
         this.page = page;
         this.feature = feature;
@@ -36,6 +37,7 @@ public class Action {
         this.count = count;
         this.startsWith = startsWith;
         this.objectType = objectType;
+        this.rate = rate;
     }
 
     public String getType() {
@@ -70,7 +72,7 @@ public class Action {
         return startsWith;
     }
 
-    public double getRate() {
+    public int getRate() {
         return rate;
     }
 }
