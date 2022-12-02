@@ -16,7 +16,6 @@ public class Movie {
     private int numLikes;
     private int numRatings;
     private int ratingSum;
-    private double rating;
 
     @JsonCreator
     private Movie(@JsonProperty("name") final String name,

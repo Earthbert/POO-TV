@@ -53,4 +53,14 @@ public class MovieList {
         }
         return ret;
     }
+
+    public static List<Movie> searchMovie(final List<Movie> movies, final String startWith) {
+        final List<Movie> matchingMovies = new ArrayList<>();
+        for (final Movie movie : movies) {
+            if (movie.getName().startsWith(startWith)) {
+                matchingMovies.add(movie);
+            }
+        }
+        return matchingMovies;
+    }
 }

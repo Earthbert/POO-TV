@@ -18,7 +18,6 @@ public class Filter {
         return sort;
     }
 
-
     public Contains getContains() {
         return contains;
     }

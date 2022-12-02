@@ -1,12 +1,16 @@
-package utils;
+package page;
 
-import java.util.Arrays;
+import user.User;
+
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 public class Page {
-    private Page() {
+    private User user;
+    private String name;
+
+    public Page(final String name) {
+        this.name = name;
     }
 
     private record Proprieties(List<String> pageLinks, List<String> features) {
@@ -33,11 +37,27 @@ public class Page {
             List.of("buy premium account", "buy tokens")));
     }
 
-    public static boolean hasLinkTo(final String currentPage, final String targetPage) {
-        return PAGE_PROP.get(currentPage).pageLinks.contains(targetPage);
+    public boolean hasLinkTo(final String targetPage) {
+        return PAGE_PROP.get(this.name).pageLinks.contains(targetPage);
     }
 
-    public static boolean hasFeature(final String currentPage, final String feature) {
-        return PAGE_PROP.get(currentPage).features.contains(feature);
+    public boolean hasFeature(final String feature) {
+        return PAGE_PROP.get(this.name).features.contains(feature);
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(final User user) {
+        this.user = user;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(final String name) {
+        this.name = name;
     }
 }

@@ -9,21 +9,21 @@ import movie.MovieList;
 import user.Credentials;
 import user.User;
 import user.UserAction;
-import utils.Page;
+import page.Page;
 
 import java.util.List;
 
+import static movie.MovieList.searchMovie;
+
 public class Execution {
     private final OutputWriter outputWriter;
-    private User currentUser;
-    private List<Movie> currentMovies;
-    private String currentPage;
+    private final Page currentPage;
 
     private final ChangePageAction changePageAction = new ChangePageAction();
     private final OnPageAction onPageAction = new OnPageAction();
 
     public Execution(final ArrayNode arrayNode) {
-        currentPage = "logout";
+        currentPage = new Page("logout");
         outputWriter = new OutputWriter(arrayNode);
     }
 
@@ -52,54 +52,55 @@ public class Execution {
         }
 
         private void logout() {
-            if (Page.hasLinkTo(currentPage, "logout")) {
-                currentPage = "logout";
-                currentUser = null;
-                currentMovies = null;
+            if (currentPage.hasLinkTo("logout")) {
+                currentPage.setName("logout");
+                currentPage.setUser(null);
             } else {
                 outputWriter.write();
             }
         }
 
         private void login() {
-            if (Page.hasLinkTo(currentPage, "login")) {
-                currentPage = "login";
+            if (currentPage.hasLinkTo("login")) {
+                currentPage.setName("login");
             } else {
                 outputWriter.write();
             }
         }
 
         private void register() {
-            if (Page.hasLinkTo(currentPage, "register")) {
-                currentPage = "register";
+            if (currentPage.hasLinkTo("register")) {
+                currentPage.setName("register");
             } else {
                 outputWriter.write();
             }
         }
 
         private void homepage() {
-            if (Page.hasLinkTo(currentPage, "homepage")) {
-                currentPage = "homepage";
+            if (currentPage.hasLinkTo("homepage")) {
+                currentPage.setName("homepage");
             } else {
                 outputWriter.write();
             }
         }
 
         private void movies() {
-            if (Page.hasLinkTo(currentPage, "movies")) {
-                currentPage = "movies";
-                currentMovies = MovieList.available(Database.getInstance().getMovies(), currentUser);
-                outputWriter.write(currentMovies, currentUser);
+            if (currentPage.hasLinkTo("movies")) {
+                currentPage.setName("movies");
+                final List<Movie> currentMovies = MovieList.available(Database.getInstance().getMovies(), currentPage.getUser());
+                outputWriter.write(currentMovies, currentPage.getUser());
             } else {
                 outputWriter.write();
             }
         }
 
         private void seeDetails(final String movieName) {
-            if (Page.hasLinkTo(currentPage, "see details")) {
-                if (MovieList.getMovie(currentMovies, movieName).size() > 0) {
-                    final List<Movie> currentMovie = MovieList.getMovie(currentMovies, movieName);
-                    outputWriter.write(currentMovie, currentUser);
+            if (currentPage.hasLinkTo("see details")) {
+                final List<Movie> availableMovies = MovieList.available(Database.getInstance().getMovies(), currentPage.getUser());
+                final List<Movie> currentMovie = MovieList.getMovie(availableMovies, movieName);
+                if (currentMovie.size() > 0) {
+                    currentPage.setName("see details");
+                    outputWriter.write(currentMovie, currentPage.getUser());
                 } else {
                     outputWriter.write();
                 }
@@ -109,9 +110,8 @@ public class Execution {
         }
 
         private void upgrades() {
-            if (Page.hasLinkTo(currentPage, "upgrades")) {
-                currentPage = "upgrades";
-                currentMovies = null;
+            if (currentPage.hasLinkTo("upgrades")) {
+                currentPage.setName("upgrades");
             } else {
                 outputWriter.write();
             }
@@ -136,14 +136,14 @@ public class Execution {
         }
 
         private void login(final Credentials credentials) {
-            if (Page.hasFeature(currentPage, "login")) {
+            if (currentPage.hasFeature("login")) {
                 final User user = UserAction.login(credentials);
                 if (user != null) {
-                    currentPage = "homepage";
-                    currentUser = user;
-                    outputWriter.write(currentUser);
+                    currentPage.setName("homepage");
+                    currentPage.setUser(user);
+                    outputWriter.write(user);
                 } else {
-                    currentPage = "logout";
+                    currentPage.setName("logout");
                     outputWriter.write();
                 }
             } else {
@@ -152,14 +152,14 @@ public class Execution {
         }
 
         private void register(Credentials credentials) {
-            if (Page.hasFeature(currentPage, "register")) {
+            if (currentPage.hasFeature("register")) {
                 final User user = UserAction.register(credentials);
                 if (user != null) {
-                    currentPage = "homepage";
-                    currentUser = user;
-                    outputWriter.write(currentUser);
+                    currentPage.setName("homepage");
+                    currentPage.setUser(user);
+                    outputWriter.write(user);
                 } else {
-                    currentPage = "logout";
+                    currentPage.setName("logout");
                     outputWriter.write();
                 }
             } else {
@@ -167,7 +167,14 @@ public class Execution {
             }
         }
 
-        private void search(String startsWith) {
+        private void search(final String startsWith) {
+            if (currentPage.hasFeature("search")) {
+                final List<Movie> availableMovies = MovieList.available(Database.getInstance().getMovies(), currentPage.getUser());
+                final List<Movie> foundMovies = MovieList.searchMovie(availableMovies, startsWith);
+                outputWriter.write(foundMovies, currentPage.getUser());
+            } else {
+                outputWriter.write();
+            }
         }
 
         private void filter(Filter filters) {

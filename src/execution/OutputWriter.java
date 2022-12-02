@@ -26,7 +26,7 @@ public class OutputWriter {
         arrayNode.addPOJO(objectNode);
     }
 
-    public void write(List<Movie> movies, User user) {
+    public void write(final List<Movie> movies, final User user) {
         final ObjectNode objectNode = objectMapper.createObjectNode();
         objectNode.putPOJO("error", null);
         objectNode.putPOJO("currentMoviesList", MovieList.copyMovies(movies));
@@ -34,7 +34,7 @@ public class OutputWriter {
         arrayNode.addPOJO(objectNode);
     }
 
-    public void write(User user) {
+    public void write(final User user) {
         final ObjectNode objectNode = objectMapper.createObjectNode();
         objectNode.putPOJO("error", null);
         objectNode.putPOJO("currentMoviesList", new ArrayList<>());
