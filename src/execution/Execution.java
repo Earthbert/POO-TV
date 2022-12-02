@@ -1,7 +1,7 @@
 package execution;
 
 import action.Action;
-import action.Filter;
+import action.filter.Filter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import database.Database;
 import movie.Movie;
@@ -12,8 +12,6 @@ import user.UserAction;
 import page.Page;
 
 import java.util.List;
-
-import static movie.MovieList.searchMovie;
 
 public class Execution {
     private final OutputWriter outputWriter;
@@ -177,7 +175,14 @@ public class Execution {
             }
         }
 
-        private void filter(Filter filters) {
+        private void filter(Filter filter) {
+            if (currentPage.hasFeature("filter")) {
+                final List<Movie> availableMovies = MovieList.available(Database.getInstance().getMovies(), currentPage.getUser());
+                final List<Movie> filteredMovies = filter.apply(availableMovies);
+                outputWriter.write(filteredMovies, currentPage.getUser());
+            } else {
+                outputWriter.write();
+            }
         }
 
         private void purchase(String movie) {

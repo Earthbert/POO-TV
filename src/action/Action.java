@@ -1,5 +1,6 @@
 package action;
 
+import action.filter.Filter;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import user.Credentials;
@@ -67,10 +68,6 @@ public class Action {
 
     public String getStartsWith() {
         return startsWith;
-    }
-
-    public String getObjectType() {
-        return objectType;
     }
 
     public double getRate() {

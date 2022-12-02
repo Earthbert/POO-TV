@@ -1,7 +1,10 @@
-package action;
+package action.filter;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import movie.Movie;
+
+import java.util.List;
 
 public class Filter {
     private final Sort sort;
@@ -14,11 +17,11 @@ public class Filter {
         this.contains = contains;
     }
 
-    public Sort getSort() {
-        return sort;
-    }
-
-    public Contains getContains() {
-        return contains;
+    public List<Movie> apply(List<Movie> movies) {
+        if (contains != null) {
+             movies = contains.apply(movies);
+        }
+        sort.apply(movies);
+        return movies;
     }
 }
