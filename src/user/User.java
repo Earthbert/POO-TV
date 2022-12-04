@@ -90,7 +90,7 @@ public class User {
     }
 
     public boolean rateMovie(final Movie movie, final int rate) {
-        if (watchedMovies.contains(movie)) {
+        if (watchedMovies.contains(movie) && (rate >= 1 && rate <= 5)) {
             if (!ratedMovies.contains(movie)) {
                 movie.rate(rate);
                 ratedMovies.add(movie);
