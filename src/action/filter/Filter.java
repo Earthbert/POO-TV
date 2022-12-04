@@ -6,7 +6,7 @@ import movie.Movie;
 
 import java.util.List;
 
-public class Filter {
+final public class Filter {
     private final Sort sort;
     private final Contains contains;
 

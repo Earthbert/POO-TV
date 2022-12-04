@@ -2,11 +2,10 @@ package user;
 
 import database.Database;
 
-import javax.xml.crypto.Data;
 import java.util.Optional;
 
-public class UserAction {
-    public static User login(Credentials credentials) {
+final public class UserAction {
+    public static User login(final Credentials credentials) {
         final Optional<User> optionalUser = Database.getInstance().getUsers().stream()
             .filter(x -> x.getCredentials().getName().equals(credentials.getName())).findFirst();
 
@@ -19,7 +18,7 @@ public class UserAction {
         return null;
     }
 
-    public static User register(Credentials credentials) {
+    public static User register(final Credentials credentials) {
         final Optional<User> optionalUser = Database.getInstance().getUsers().stream()
             .filter(x -> x.getCredentials().getName().equals(credentials.getName())).findFirst();
         if (optionalUser.isPresent()) {

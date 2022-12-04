@@ -10,9 +10,9 @@ import user.User;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OutputWriter {
-    ArrayNode arrayNode;
-    ObjectMapper objectMapper = new ObjectMapper();
+final public class OutputWriter {
+    final ArrayNode arrayNode;
+    final ObjectMapper objectMapper = new ObjectMapper();
 
     public OutputWriter(final ArrayNode arrayNode) {
         this.arrayNode = arrayNode;

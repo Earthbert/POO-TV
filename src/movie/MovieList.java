@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class MovieList {
+final public class MovieList {
     /**
      * Return available movies to a specific user.
      *

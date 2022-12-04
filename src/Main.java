@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(final String[] args) throws IOException {
         final ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.readValue(new File(args[0]), Database.class);
         final ArrayNode arrayNode = objectMapper.createArrayNode();

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
 
-public class Movie {
+final public class Movie {
     private final String name;
     private final int year;
     private final int duration;

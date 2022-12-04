@@ -9,7 +9,7 @@ import user.User;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Database {
+final public class Database {
     private static Database instance;
     private final List<User> users;
     private final List<Movie> movies;

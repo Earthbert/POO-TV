@@ -3,7 +3,7 @@ package user;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Credentials {
+final public class Credentials {
     private final String name;
     private final String password;
     private String accountType;

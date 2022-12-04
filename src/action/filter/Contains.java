@@ -7,7 +7,7 @@ import movie.Movie;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Contains {
+final public class Contains {
     private final List<String> actors;
     private final List<String> genre;
 
