@@ -61,9 +61,9 @@ public class Movie {
         numRatings++;
     }
 
-    public double getRating() {
+    public int getRating() {
         if (numRatings > 0)
-            return (double) ratingSum / (double) numRatings;
+            return (int)((double) ratingSum / (double) numRatings);
         return 0;
     }
 

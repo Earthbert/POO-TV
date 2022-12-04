@@ -30,7 +30,7 @@ public class Page {
         // Logged-in Homepage
         PAGE_PROP.put("homepage", new Proprieties(List.of("movies", "upgrades", "logout"), List.of()));
         // Movies page
-        PAGE_PROP.put("movies", new Proprieties(List.of("homepage", "see details", "logout"), List.of("search", "filter")));
+        PAGE_PROP.put("movies", new Proprieties(List.of("homepage", "see details", "logout", "movies"), List.of("search", "filter")));
         // Movie details page
         PAGE_PROP.put("see details", new Proprieties(List.of("homepage", "movies", "upgrades", "logout"),
             List.of("purchase", "watch", "like", "rate")));
