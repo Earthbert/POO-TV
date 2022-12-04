@@ -26,7 +26,7 @@ public class Execution {
     }
 
     public void start() {
-        for (Action action : Database.getInstance().getActions()) {
+        for (final Action action : Database.getInstance().getActions()) {
             switch (action.getType()) {
                 case "change page" -> changePageAction.handle(action);
                 case "on page" -> onPageAction.handle(action);
@@ -36,7 +36,7 @@ public class Execution {
     }
 
     private class ChangePageAction {
-        private void handle(Action action) {
+        private void handle(final Action action) {
             switch (action.getPage()) {
                 case "login" -> login();
                 case "register" -> register();
@@ -54,6 +54,7 @@ public class Execution {
                 currentPage.setName("logout");
                 currentPage.setUser(null);
                 currentPage.setMovie(null);
+                currentPage.setMovies(null);
             } else {
                 outputWriter.write();
             }
@@ -62,7 +63,6 @@ public class Execution {
         private void login() {
             if (currentPage.hasLinkTo("login")) {
                 currentPage.setName("login");
-                currentPage.setMovie(null);
             } else {
                 outputWriter.write();
             }
@@ -81,6 +81,7 @@ public class Execution {
             if (currentPage.hasLinkTo("homepage")) {
                 currentPage.setName("homepage");
                 currentPage.setMovie(null);
+                currentPage.setMovies(null);
             } else {
                 outputWriter.write();
             }
@@ -91,6 +92,7 @@ public class Execution {
                 currentPage.setName("movies");
                 currentPage.setMovie(null);
                 final List<Movie> currentMovies = MovieList.available(Database.getInstance().getMovies(), currentPage.getUser());
+                currentPage.setMovies(currentMovies);
                 outputWriter.write(currentMovies, currentPage.getUser());
             } else {
                 outputWriter.write();
@@ -99,8 +101,7 @@ public class Execution {
 
         private void seeDetails(final String movieName) {
             if (currentPage.hasLinkTo("see details")) {
-                final List<Movie> availableMovies = MovieList.available(Database.getInstance().getMovies(), currentPage.getUser());
-                final Optional<Movie> currentMovie = MovieList.getMovie(availableMovies, movieName);
+                final Optional<Movie> currentMovie = MovieList.getMovie(currentPage.getMovies(), movieName);
                 if (currentMovie.isPresent()) {
                     currentPage.setName("see details");
                     currentPage.setMovie(currentMovie.get());
@@ -176,6 +177,7 @@ public class Execution {
             if (currentPage.hasFeature("search")) {
                 final List<Movie> availableMovies = MovieList.available(Database.getInstance().getMovies(), currentPage.getUser());
                 final List<Movie> foundMovies = MovieList.searchMovie(availableMovies, startsWith);
+                currentPage.setMovies(foundMovies);
                 outputWriter.write(foundMovies, currentPage.getUser());
             } else {
                 outputWriter.write();
@@ -186,6 +188,7 @@ public class Execution {
             if (currentPage.hasFeature("filter")) {
                 final List<Movie> availableMovies = MovieList.available(Database.getInstance().getMovies(), currentPage.getUser());
                 final List<Movie> filteredMovies = filter.apply(availableMovies);
+                currentPage.setMovies(filteredMovies);
                 outputWriter.write(filteredMovies, currentPage.getUser());
             } else {
                 outputWriter.write();

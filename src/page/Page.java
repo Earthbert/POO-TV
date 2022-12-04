@@ -6,10 +6,11 @@ import user.User;
 import java.util.HashMap;
 import java.util.List;
 
-public class Page {
+final public class Page {
     private User user;
     private String name;
     private Movie movie;
+    private List<Movie> movies;
 
     public Page(final String name) {
         this.name = name;
@@ -69,5 +70,13 @@ public class Page {
 
     public void setMovie(final Movie movie) {
         this.movie = movie;
+    }
+
+    public List<Movie> getMovies() {
+        return movies;
+    }
+
+    public void setMovies(final List<Movie> movies) {
+        this.movies = movies;
     }
 }
