@@ -27,7 +27,7 @@ final public class Contains {
         }
         if (genre != null) {
             filteredMovies = filteredMovies.stream()
-                .filter(x -> x.getActors().containsAll(genre))
+                .filter(x -> x.getGenres().containsAll(genre))
                 .collect(Collectors.toList());
         }
         return filteredMovies;
