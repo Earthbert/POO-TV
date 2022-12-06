@@ -32,23 +32,23 @@ final public class Sort {
     }
 
     private void sortByDurationAndRating(final List<Movie> movies) {
-        final Comparator<Movie> comparator;
-        if (duration.equals("descending")) {
-            comparator = Comparator.comparing(Movie::getDuration).reversed();
+        Comparator<Movie> comparator;
+        if (duration.equals("decreasing")) {
+            comparator = Comparator.comparing(Movie::getDuration, Comparator.reverseOrder());
         } else {
             comparator = Comparator.comparing(Movie::getDuration);
         }
-        if (rating.equals("descending")) {
-            comparator.thenComparing(Movie::getRating).reversed();
+        if (rating.equals("decreasing")) {
+            comparator = comparator.thenComparing(Movie::getRating, Comparator.reverseOrder());
         } else {
-            comparator.thenComparing(Movie::getRating);
+            comparator = comparator.thenComparing(Movie::getRating);
         }
         movies.sort(comparator);
     }
 
     private void sortByRating(final List<Movie> movies) {
         final Comparator<Movie> comparator;
-        if (rating.equals("descending")) {
+        if (rating.equals("decreasing")) {
             comparator = Comparator.comparing(Movie::getRating).reversed();
         } else {
             comparator = Comparator.comparing(Movie::getRating);
@@ -58,7 +58,7 @@ final public class Sort {
 
     private void sortByDuration(final List<Movie> movies) {
         final Comparator<Movie> comparator;
-        if (duration.equals("descending")) {
+        if (duration.equals("decreasing")) {
             comparator = Comparator.comparing(Movie::getDuration).reversed();
         } else {
             comparator = Comparator.comparing(Movie::getDuration);
