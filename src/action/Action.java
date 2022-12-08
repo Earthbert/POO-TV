@@ -14,7 +14,6 @@ final public class Action {
     private final String movie;
     private final int count;
     private final String startsWith;
-    private final String objectType;
     private final int rate;
 
     @JsonCreator
@@ -26,7 +25,6 @@ final public class Action {
                    @JsonProperty("movie") final String movies,
                    @JsonProperty("count") final int count,
                    @JsonProperty("startsWith") final String startsWith,
-                   @JsonProperty("objectType") final String objectType,
                    @JsonProperty("rate") final int rate) {
         this.type = type;
         this.page = page;
@@ -36,7 +34,6 @@ final public class Action {
         this.movie = movies;
         this.count = count;
         this.startsWith = startsWith;
-        this.objectType = objectType;
         this.rate = rate;
     }
 
