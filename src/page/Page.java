@@ -8,12 +8,12 @@ import java.util.List;
 
 public final class Page {
     private User user;
-    private String name;
+    private String type;
     private Movie movie;
     private List<Movie> movies;
 
     public Page(final String name) {
-        this.name = name;
+        this.type = name;
     }
 
     private record Proprieties(List<String> pageLinks, List<String> features) {
@@ -58,7 +58,7 @@ public final class Page {
      * @return True / False
      */
     public boolean hasLinkTo(final String targetPage) {
-        return PAGE_PROP.get(this.name).pageLinks.contains(targetPage);
+        return PAGE_PROP.get(this.type).pageLinks.contains(targetPage);
     }
 
     /**
@@ -67,7 +67,7 @@ public final class Page {
      * @return True / False
      */
     public boolean hasFeature(final String feature) {
-        return PAGE_PROP.get(this.name).features.contains(feature);
+        return PAGE_PROP.get(this.type).features.contains(feature);
     }
 
     public User getUser() {
@@ -78,12 +78,12 @@ public final class Page {
         this.user = user;
     }
 
-    public String getName() {
-        return name;
+    public String getType() {
+        return type;
     }
 
-    public void setName(final String name) {
-        this.name = name;
+    public void setType(final String type) {
+        this.type = type;
     }
 
     public Movie getMovie() {

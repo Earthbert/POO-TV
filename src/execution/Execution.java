@@ -56,7 +56,7 @@ public class Execution {
 
         private void logout() {
             if (currentPage.hasLinkTo("logout")) {
-                currentPage.setName("logout");
+                currentPage.setType("logout");
                 currentPage.setUser(null);
                 currentPage.setMovie(null);
                 currentPage.setMovies(null);
@@ -67,7 +67,7 @@ public class Execution {
 
         private void login() {
             if (currentPage.hasLinkTo("login")) {
-                currentPage.setName("login");
+                currentPage.setType("login");
             } else {
                 outputWriter.write();
             }
@@ -75,7 +75,7 @@ public class Execution {
 
         private void register() {
             if (currentPage.hasLinkTo("register")) {
-                currentPage.setName("register");
+                currentPage.setType("register");
                 currentPage.setMovie(null);
             } else {
                 outputWriter.write();
@@ -84,7 +84,7 @@ public class Execution {
 
         private void homepage() {
             if (currentPage.hasLinkTo("homepage")) {
-                currentPage.setName("homepage");
+                currentPage.setType("homepage");
                 currentPage.setMovie(null);
                 currentPage.setMovies(null);
             } else {
@@ -94,7 +94,7 @@ public class Execution {
 
         private void movies() {
             if (currentPage.hasLinkTo("movies")) {
-                currentPage.setName("movies");
+                currentPage.setType("movies");
                 currentPage.setMovie(null);
                 final List<Movie> currentMovies = MovieList.available(
                         Database.getInstance().getMovies(), currentPage.getUser());
@@ -110,7 +110,7 @@ public class Execution {
                 final Optional<Movie> currentMovie = MovieList.getMovie(
                         currentPage.getMovies(), movieName);
                 if (currentMovie.isPresent()) {
-                    currentPage.setName("see details");
+                    currentPage.setType("see details");
                     currentPage.setMovie(currentMovie.get());
                     outputWriter.write(List.of(currentMovie.get()), currentPage.getUser());
                 } else {
@@ -123,7 +123,7 @@ public class Execution {
 
         private void upgrades() {
             if (currentPage.hasLinkTo("upgrades")) {
-                currentPage.setName("upgrades");
+                currentPage.setType("upgrades");
                 currentPage.setMovie(null);
             } else {
                 outputWriter.write();
@@ -152,11 +152,11 @@ public class Execution {
             if (currentPage.hasFeature("login")) {
                 final User user = UserAction.login(credentials);
                 if (user != null) {
-                    currentPage.setName("homepage");
+                    currentPage.setType("homepage");
                     currentPage.setUser(user);
                     outputWriter.write(user);
                 } else {
-                    currentPage.setName("logout");
+                    currentPage.setType("logout");
                     outputWriter.write();
                 }
             } else {
@@ -168,11 +168,11 @@ public class Execution {
             if (currentPage.hasFeature("register")) {
                 final User user = UserAction.register(credentials);
                 if (user != null) {
-                    currentPage.setName("homepage");
+                    currentPage.setType("homepage");
                     currentPage.setUser(user);
                     outputWriter.write(user);
                 } else {
-                    currentPage.setName("logout");
+                    currentPage.setType("logout");
                     outputWriter.write();
                 }
             } else {
