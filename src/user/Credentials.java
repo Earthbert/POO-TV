@@ -3,7 +3,7 @@ package user;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-final public class Credentials {
+public final class Credentials {
     private final String name;
     private final String password;
     private String accountType;
@@ -32,8 +32,9 @@ final public class Credentials {
     }
 
     boolean spendBalance(final int count) {
-        if (count > balance)
+        if (count > balance) {
             return false;
+        }
         balance -= count;
         return true;
     }

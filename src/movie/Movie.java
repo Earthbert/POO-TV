@@ -4,8 +4,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
-final public class Movie {
+public final class Movie {
     private final String name;
     private final int year;
     private final int duration;
@@ -45,25 +46,43 @@ final public class Movie {
 
     @Override
     public boolean equals(final Object obj) {
-        if (obj.getClass() == String.class)
+        if (obj.getClass() == String.class) {
             return obj.equals(this.name);
-        if (obj.getClass() == Movie.class)
-            return ((Movie)obj).getName().equals(this.name);
+        }
+        if (obj.getClass() == Movie.class) {
+            return ((Movie) obj).getName().equals(this.name);
+        }
         return false;
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, year, duration, genres, actors, countriesBanned, numLikes, numRatings, ratingSum);
+    }
+
+    /**
+     * Called when a movie receives a like.
+     */
     public void getLiked() {
         numLikes++;
     }
 
+    /**
+     * Called when a movie receives a rating.
+     */
     public void rate(final int rate) {
         ratingSum += rate;
         numRatings++;
     }
 
+    /**
+     * Getter for rating
+     * It calculates the rating everytime it's called.
+     */
     public double getRating() {
-        if (numRatings > 0)
+        if (numRatings > 0) {
             return (double) ratingSum / (double) numRatings;
+        }
         return 0;
     }
 

@@ -6,7 +6,7 @@ import user.User;
 import java.util.HashMap;
 import java.util.List;
 
-final public class Page {
+public final class Page {
     private User user;
     private String name;
     private Movie movie;
@@ -23,27 +23,49 @@ final public class Page {
 
     static {
         // Login page
-        PAGE_PROP.put("login", new Proprieties(List.of(),List.of("login")));
+        PAGE_PROP.put("login", new Proprieties(
+                List.of(),
+                List.of("login")));
         // Register page
-        PAGE_PROP.put("register", new Proprieties(List.of(), List.of("register")));
+        PAGE_PROP.put("register", new Proprieties(
+                List.of(),
+                List.of("register")));
         // Homepage not logged-in.
-        PAGE_PROP.put("logout", new Proprieties(List.of("login", "register"), List.of()));
+        PAGE_PROP.put("logout", new Proprieties(
+                List.of("login", "register"),
+                List.of()));
         // Logged-in Homepage
-        PAGE_PROP.put("homepage", new Proprieties(List.of("movies", "upgrades", "logout"), List.of()));
+        PAGE_PROP.put("homepage", new Proprieties(
+                List.of("movies", "upgrades", "logout"),
+                List.of()));
         // Movies page
-        PAGE_PROP.put("movies", new Proprieties(List.of("homepage", "see details", "logout", "movies"), List.of("search", "filter")));
+        PAGE_PROP.put("movies", new Proprieties(
+                List.of("homepage", "see details", "logout", "movies"),
+                List.of("search", "filter")));
         // Movie details page
-        PAGE_PROP.put("see details", new Proprieties(List.of("homepage", "movies", "upgrades", "logout"),
-            List.of("purchase", "watch", "like", "rate")));
+        PAGE_PROP.put("see details", new Proprieties(
+                List.of("homepage", "movies", "upgrades", "logout"),
+                List.of("purchase", "watch", "like", "rate")));
         // Upgrades page
-        PAGE_PROP.put("upgrades", new Proprieties(List.of("homepage", "movies", "logout"),
-            List.of("buy premium account", "buy tokens")));
+        PAGE_PROP.put("upgrades", new Proprieties(
+                List.of("homepage", "movies", "logout"),
+                List.of("buy premium account", "buy tokens")));
     }
 
+    /**
+     * Check if this page has link to Target Page.
+     * @param targetPage Target Page
+     * @return True / False
+     */
     public boolean hasLinkTo(final String targetPage) {
         return PAGE_PROP.get(this.name).pageLinks.contains(targetPage);
     }
 
+    /**
+     * Check if this page has Feature.
+     * @param feature Feature
+     * @return True / False
+     */
     public boolean hasFeature(final String feature) {
         return PAGE_PROP.get(this.name).features.contains(feature);
     }

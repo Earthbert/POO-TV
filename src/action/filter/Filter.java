@@ -6,7 +6,7 @@ import movie.Movie;
 
 import java.util.List;
 
-final public class Filter {
+public final class Filter {
     private final Sort sort;
     private final Contains contains;
 
@@ -17,13 +17,19 @@ final public class Filter {
         this.contains = contains;
     }
 
-    public List<Movie> apply(List<Movie> movies) {
+    /**
+     * Applies this filter over a Movie list
+     * @param movies Movie list to be filtered
+     * @return filtered Movie list
+     */
+    public List<Movie> apply(final List<Movie> movies) {
+        List<Movie> filteredMovies = movies;
         if (contains != null) {
-             movies = contains.apply(movies);
+             filteredMovies = contains.apply(filteredMovies);
         }
         if (sort != null) {
-            sort.apply(movies);
+            sort.apply(filteredMovies);
         }
-        return movies;
+        return filteredMovies;
     }
 }

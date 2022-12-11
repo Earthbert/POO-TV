@@ -8,8 +8,8 @@ import user.User;
 import java.util.ArrayList;
 import java.util.List;
 
-final public class Database {
-    private static final ThreadLocal<Database> instance = new ThreadLocal<>();
+public final class Database {
+    private static final ThreadLocal<Database> INSTANCE = new ThreadLocal<>();
     private final List<User> users;
     private final List<Movie> movies;
     private final List<Action> actions;
@@ -18,18 +18,18 @@ final public class Database {
     private Database(@JsonProperty("users") final ArrayList<User> users,
                     @JsonProperty("movies") final ArrayList<Movie> movies,
                     @JsonProperty("actions") final ArrayList<Action> actions) {
-        if (instance.get() != null) {
+        if (INSTANCE.get() != null) {
             System.err.println("Multiple Instances of Database");
             System.exit(-1);
         }
-        instance.set(this);
+        INSTANCE.set(this);
         this.users = users;
         this.movies = movies;
         this.actions = actions;
     }
 
     public static Database getInstance() {
-        return instance.get();
+        return INSTANCE.get();
     }
 
     public List<User> getUsers() {

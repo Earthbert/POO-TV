@@ -7,7 +7,13 @@ import execution.Execution;
 import java.io.File;
 import java.io.IOException;
 
-public class Main {
+public final class Main {
+    private Main() { }
+    /**
+     * Main function
+     * @param args args - input file, output file
+     * @throws IOException When input file doesn't exist.
+     */
     public static void main(final String[] args) throws IOException {
         final ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.readValue(new File(args[0]), Database.class);

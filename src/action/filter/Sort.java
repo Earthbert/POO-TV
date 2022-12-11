@@ -6,7 +6,7 @@ import movie.Movie;
 import java.util.Comparator;
 import java.util.List;
 
-final public class Sort {
+public final class Sort {
     private final String rating;
     private final String duration;
 

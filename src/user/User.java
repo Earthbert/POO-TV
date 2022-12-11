@@ -8,10 +8,16 @@ import movie.MovieList;
 import java.util.ArrayList;
 import java.util.List;
 
-final public class User {
+public final class User {
+    private static final int INITIAL_FREE_MOVIES = 15;
+    private static final int PREMIUM_ACCOUNT_COST = 10;
+    private static final int MOVIE_COST = 2;
+    private static final int MIN_RATING = 1;
+    private static final int MAX_RATING = 5;
+
     private final Credentials credentials;
     private int tokensCount;
-    private int numFreePremiumMovies = 15;
+    private int numFreePremiumMovies = INITIAL_FREE_MOVIES;
     private final List<Movie> purchasedMovies;
     private final List<Movie> watchedMovies;
     private final List<Movie> likedMovies;
@@ -36,6 +42,11 @@ final public class User {
         this.ratedMovies = MovieList.copyMovies(user.ratedMovies);
     }
 
+    /**
+     * Make this user buy Count tokens.
+     * @param count Count
+     * @return Returns True if purchase was successful, false otherwise
+     */
     public boolean buyTokens(final int count) {
         if (!credentials.spendBalance(count)) {
             return false;
@@ -44,29 +55,43 @@ final public class User {
         return true;
     }
 
+    /**
+     * Make this user buy premium account.
+     * @return Returns True if purchase was successful, false otherwise
+     */
     public boolean buyPremiumAccount() {
-        if (tokensCount < 10) {
+        if (tokensCount < PREMIUM_ACCOUNT_COST) {
             return false;
         }
-        tokensCount -= 10;
+        tokensCount -= PREMIUM_ACCOUNT_COST;
         credentials.makePremium();
         return true;
     }
 
+    /**
+     * Make this user buy Movie.
+     * @param movie Movie
+     * @return Returns True if purchase was successful, false otherwise
+     */
     public boolean buyMovie(final Movie movie) {
         if (credentials.isPremium() && numFreePremiumMovies > 0) {
             purchasedMovies.add(movie);
             numFreePremiumMovies--;
             return true;
         }
-        if (tokensCount >= 2) {
+        if (tokensCount >= MOVIE_COST) {
             purchasedMovies.add(movie);
-            tokensCount -= 2;
+            tokensCount -= MOVIE_COST;
             return true;
         }
         return false;
     }
 
+    /**
+     * Make this user watch Movie.
+     * @param movie Movie
+     * @return Return true if action was successful, false otherwise.
+     */
     public boolean watchMovie(final Movie movie) {
         if (!purchasedMovies.contains(movie)) {
             return false;
@@ -78,6 +103,11 @@ final public class User {
         return true;
     }
 
+    /**
+     * Make this user like Movie.
+     * @param movie Movie
+     * @return Return true if action was successful, false otherwise.
+     */
     public boolean likeMovie(final Movie movie) {
         if (watchedMovies.contains(movie)) {
             if (!likedMovies.contains(movie)) {
@@ -89,8 +119,13 @@ final public class User {
         return false;
     }
 
+    /**
+     * Make this user rate Movie.
+     * @param movie Movie
+     * @return Return true if action was successful, false otherwise.
+     */
     public boolean rateMovie(final Movie movie, final int rate) {
-        if (watchedMovies.contains(movie) && (rate >= 1 && rate <= 5)) {
+        if (watchedMovies.contains(movie) && (rate >= MIN_RATING && rate <= MAX_RATING)) {
             if (!ratedMovies.contains(movie)) {
                 movie.rate(rate);
                 ratedMovies.add(movie);

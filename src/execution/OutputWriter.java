@@ -10,14 +10,18 @@ import user.User;
 import java.util.ArrayList;
 import java.util.List;
 
-final public class OutputWriter {
-    final ArrayNode arrayNode;
-    final ObjectMapper objectMapper = new ObjectMapper();
+public final class OutputWriter {
+    private final ArrayNode arrayNode;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public OutputWriter(final ArrayNode arrayNode) {
         this.arrayNode = arrayNode;
     }
 
+    /**
+     * Add output on arrayNode.
+     * Used when an error occurs.
+     */
     public void write() {
         final ObjectNode objectNode = objectMapper.createObjectNode();
         objectNode.put("error", "Error");
@@ -26,6 +30,10 @@ final public class OutputWriter {
         arrayNode.addPOJO(objectNode);
     }
 
+    /**
+     * Add output on arrayNode.
+     * Used to write User and Movie List to output.
+     */
     public void write(final List<Movie> movies, final User user) {
         final ObjectNode objectNode = objectMapper.createObjectNode();
         objectNode.putPOJO("error", null);
@@ -34,6 +42,10 @@ final public class OutputWriter {
         arrayNode.addPOJO(objectNode);
     }
 
+    /**
+     * Add output on arrayNode.
+     * Used to write User to output.
+     */
     public void write(final User user) {
         final ObjectNode objectNode = objectMapper.createObjectNode();
         objectNode.putPOJO("error", null);

@@ -11,7 +11,8 @@ import user.User;
 import user.UserAction;
 import page.Page;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 public class Execution {
     private final OutputWriter outputWriter;
@@ -25,6 +26,10 @@ public class Execution {
         outputWriter = new OutputWriter(arrayNode);
     }
 
+    /**
+     * Starts the execution of the program.
+     * Goes through Action List and calls specific handler depending on action type.
+     */
     public void start() {
         for (final Action action : Database.getInstance().getActions()) {
             switch (action.getType()) {
@@ -91,7 +96,8 @@ public class Execution {
             if (currentPage.hasLinkTo("movies")) {
                 currentPage.setName("movies");
                 currentPage.setMovie(null);
-                final List<Movie> currentMovies = MovieList.available(Database.getInstance().getMovies(), currentPage.getUser());
+                final List<Movie> currentMovies = MovieList.available(
+                        Database.getInstance().getMovies(), currentPage.getUser());
                 currentPage.setMovies(currentMovies);
                 outputWriter.write(currentMovies, currentPage.getUser());
             } else {
@@ -101,7 +107,8 @@ public class Execution {
 
         private void seeDetails(final String movieName) {
             if (currentPage.hasLinkTo("see details")) {
-                final Optional<Movie> currentMovie = MovieList.getMovie(currentPage.getMovies(), movieName);
+                final Optional<Movie> currentMovie = MovieList.getMovie(
+                        currentPage.getMovies(), movieName);
                 if (currentMovie.isPresent()) {
                     currentPage.setName("see details");
                     currentPage.setMovie(currentMovie.get());
@@ -175,7 +182,8 @@ public class Execution {
 
         private void search(final String startsWith) {
             if (currentPage.hasFeature("search")) {
-                final List<Movie> availableMovies = MovieList.available(Database.getInstance().getMovies(), currentPage.getUser());
+                final List<Movie> availableMovies = MovieList.available(
+                        Database.getInstance().getMovies(), currentPage.getUser());
                 final List<Movie> foundMovies = MovieList.searchMovie(availableMovies, startsWith);
                 currentPage.setMovies(foundMovies);
                 outputWriter.write(foundMovies, currentPage.getUser());
@@ -186,7 +194,8 @@ public class Execution {
 
         private void filter(final Filter filter) {
             if (currentPage.hasFeature("filter")) {
-                final List<Movie> availableMovies = MovieList.available(Database.getInstance().getMovies(), currentPage.getUser());
+                final List<Movie> availableMovies = MovieList.available(
+                        Database.getInstance().getMovies(), currentPage.getUser());
                 final List<Movie> filteredMovies = filter.apply(availableMovies);
                 currentPage.setMovies(filteredMovies);
                 outputWriter.write(filteredMovies, currentPage.getUser());
@@ -236,7 +245,8 @@ public class Execution {
         }
 
         private void buyPremium() {
-            if (!currentPage.hasFeature("buy premium account") || !currentPage.getUser().buyPremiumAccount()) {
+            if (!currentPage.hasFeature("buy premium account")
+                    || !currentPage.getUser().buyPremiumAccount()) {
                 outputWriter.write();
             }
         }

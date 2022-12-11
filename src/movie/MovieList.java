@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-final public class MovieList {
+public final class MovieList {
+    private MovieList() { }
+
     /**
      * Return available movies to a specific user.
      *
@@ -40,7 +42,7 @@ final public class MovieList {
     }
 
     /**
-     * Get a movie from Movie list by name
+     * Get a movie from Movie list by name.
      *
      * @param movies Movie List
      * @param name name of movie
@@ -50,6 +52,12 @@ final public class MovieList {
         return movies.stream().filter(x -> x.getName().equals(name)).findFirst();
     }
 
+    /**
+     * Search through a Movie list.
+     * @param movies Movie list
+     * @param startWith String that must at the start of the Movie name
+     * @return searched Movie list
+     */
     public static List<Movie> searchMovie(final List<Movie> movies, final String startWith) {
         final List<Movie> matchingMovies = new ArrayList<>();
         for (final Movie movie : movies) {

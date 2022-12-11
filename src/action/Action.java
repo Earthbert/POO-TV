@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import user.Credentials;
 
-final public class Action {
+public final class Action {
     private final String type;
     private final String page;
     private final String feature;
