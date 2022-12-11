@@ -57,7 +57,7 @@ public final class Movie {
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, year, duration, genres, actors, countriesBanned, numLikes, numRatings, ratingSum);
+        return name.hashCode();
     }
 
     /**
