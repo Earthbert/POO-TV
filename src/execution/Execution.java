@@ -4,6 +4,8 @@ import action.Action;
 import action.filter.Filter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import database.Database;
+import memento.MementoCareTakeFactory;
+import memento.MementoCareTaker;
 import movie.Movie;
 import movie.MovieList;
 import user.Credentials;
@@ -20,6 +22,8 @@ public class Execution {
 
     private final ChangePageAction changePageAction = new ChangePageAction();
     private final OnPageAction onPageAction = new OnPageAction();
+
+    private final MementoCareTaker<String, Page> prevPages = MementoCareTakeFactory.create();
 
     public Execution(final ArrayNode arrayNode) {
         currentPage = new Page("logout");

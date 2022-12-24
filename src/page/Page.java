@@ -1,12 +1,13 @@
 package page;
 
+import memento.Memento;
 import movie.Movie;
 import user.User;
 
 import java.util.HashMap;
 import java.util.List;
 
-public final class Page {
+public final class Page implements Memento<Page> {
     private User user;
     private String type;
     private Movie movie;
@@ -14,6 +15,13 @@ public final class Page {
 
     public Page(final String name) {
         this.type = name;
+    }
+
+    private Page(final Page copiedPage) {
+        this.user = copiedPage.getUser();
+        this.type = copiedPage.getType();
+        this.movie = copiedPage.getMovie();
+        this.movies = copiedPage.getMovies();
     }
 
     private record Proprieties(List<String> pageLinks, List<String> features) {
@@ -68,6 +76,19 @@ public final class Page {
      */
     public boolean hasFeature(final String feature) {
         return PAGE_PROP.get(this.type).features.contains(feature);
+    }
+
+    @Override
+    public Page saveState() {
+        return new Page(this);
+    }
+
+    @Override
+    public void restoreState(final Page state) {
+        this.type = state.getType();
+        this.user = state.getUser();
+        this.movie = state.getMovie();
+        this.movies = state.getMovies();
     }
 
     public User getUser() {
