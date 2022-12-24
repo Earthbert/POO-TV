@@ -1,5 +1,7 @@
 package memento;
 
+import java.util.List;
+
 public interface MementoCareTaker<K, T> {
     void saveState(K identifier, Memento<T> savedObject);
 
@@ -12,6 +14,10 @@ public interface MementoCareTaker<K, T> {
     T getState(K identifier);
 
     T getLastState();
+
+    List<T> getAllState();
+
+    int statesCount();
 
     void clear();
 }

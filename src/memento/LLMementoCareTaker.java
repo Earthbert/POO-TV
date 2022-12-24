@@ -1,19 +1,14 @@
 package memento;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 // MementoCareTaker List Implementation
 public class LLMementoCareTaker<K, T> implements MementoCareTaker<K, T> {
     List<IdentifierAndState<K, T>> stateList = new ArrayList<>();
 
-    private record IdentifierAndState<K, T>(K identifier, T state) {
-    }
-
     @Override
     public void saveState(final K identifier, final Memento<T> savedObject) {
+        stateList.removeIf(x -> x.identifier.equals(identifier));
         stateList.add(new IdentifierAndState<>(identifier, savedObject.saveState()));
     }
 
@@ -54,7 +49,20 @@ public class LLMementoCareTaker<K, T> implements MementoCareTaker<K, T> {
     }
 
     @Override
+    public List<T> getAllState() {
+        return stateList.stream().map(IdentifierAndState::state).toList();
+    }
+
+    @Override
+    public int statesCount() {
+        return stateList.size();
+    }
+
+    @Override
     public void clear() {
         stateList.clear();
+    }
+
+    private record IdentifierAndState<K, T>(K identifier, T state) {
     }
 }
