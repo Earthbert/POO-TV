@@ -71,7 +71,7 @@ public final class MovieList {
         return matchingMovies;
     }
 
-    public static Movie generateRecommandation(final User user) {
+    public static Movie generateRecommendation(final User user) {
         final TreeMap<String, Integer> genreLikes = new TreeMap<>();
         for (final Movie movie : user.getLikedMovies()) {
             movie.getGenres().forEach(x -> {
@@ -84,8 +84,8 @@ public final class MovieList {
                 .sorted(Map.Entry.comparingByKey())
                 .map(Map.Entry::getKey).toList();
 
-        final List<Movie> moviesSorted = Database.getInstance().getMovies().stream()
-                .sorted(Comparator.comparing(Movie::getNumLikes))
+        final List<Movie> moviesSorted = available(Database.getInstance().getMovies(), user)
+                .stream().sorted(Comparator.comparing(Movie::getNumLikes).reversed())
                 .toList();
 
         for (final String genre : sortedGenres) {

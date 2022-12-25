@@ -159,7 +159,7 @@ public final class User implements Observer {
     }
 
     public void getRecommendation() {
-        final Movie movie = MovieList.generateRecommandation(this);
+        final Movie movie = MovieList.generateRecommendation(this);
         if (movie != null) {
             notifications.add(new Notification("Recommendation", movie.getName()));
             return;
