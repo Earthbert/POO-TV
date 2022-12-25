@@ -2,7 +2,7 @@ package memento;
 
 import java.util.List;
 
-public interface MementoCareTaker<K, T> {
+public interface MementoCaretaker<K, T> {
     void saveState(K identifier, Memento<T> savedObject);
 
     void saveState(Memento<T> savedObject);

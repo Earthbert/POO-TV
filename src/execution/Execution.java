@@ -4,8 +4,8 @@ import action.Action;
 import action.filter.Filter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import database.Database;
-import memento.MementoCareTakeFactory;
-import memento.MementoCareTaker;
+import memento.MementoCaretakeFactory;
+import memento.MementoCaretaker;
 import movie.Movie;
 import movie.MovieList;
 import user.Credentials;
@@ -22,8 +22,9 @@ public class Execution {
 
     private final ChangePageAction changePageAction = new ChangePageAction();
     private final OnPageAction onPageAction = new OnPageAction();
+    private final DatabaseAction databaseAction = new DatabaseAction();
 
-    private final MementoCareTaker<String, Page> prevPages = MementoCareTakeFactory.create();
+    private final MementoCaretaker<String, Page> prevPages = MementoCaretakeFactory.create();
 
     public Execution(final ArrayNode arrayNode) {
         currentPage = new Page("logout");
@@ -39,7 +40,53 @@ public class Execution {
             switch (action.getType()) {
                 case "change page" -> changePageAction.handle(action);
                 case "on page" -> onPageAction.handle(action);
+                case "subscribe" -> onPageAction.subscribe(action.getSubscribedGenre());
+                case "database" -> databaseAction.handle(action);
+                case "back" -> rollbackPage();
                 default -> System.err.println("Invalid Action");
+            }
+        }
+        if (currentPage.getUser() != null && currentPage.getUser().getCredentials().isPremium()) {
+            currentPage.getUser().getRecommendation();
+            outputWriter.write(null, currentPage.getUser());
+        }
+    }
+
+    private void rollbackPage() {
+        if (!prevPages.restoreLastState(currentPage)) {
+            outputWriter.write();
+            return;
+        }
+        switch (currentPage.getType()) {
+            case "see details" -> outputWriter
+                    .write(List.of(currentPage.getMovie()), currentPage.getUser());
+            case "movies" -> {
+                currentPage.setMovies(MovieList.available(
+                        Database.getInstance().getMovies(), currentPage.getUser()));
+                outputWriter.write(currentPage.getMovies(), currentPage.getUser());
+            }
+            default -> { }
+        }
+    }
+
+    private class DatabaseAction {
+        private void handle(final Action action) {
+            switch (action.getFeature()) {
+                case "add" -> addMovie(action.getAddedMovie());
+                case "delete" -> deleteMovie(action.getDeletedMovie());
+                default -> System.err.println("Invalid Database Action");
+            }
+        }
+
+        private void addMovie(final Movie addedMovie) {
+            if (!Database.getInstance().addMovie(addedMovie)) {
+                outputWriter.write();
+            }
+        }
+
+        private void deleteMovie(final String deletedMovie) {
+            if (!Database.getInstance().deleteMovie(deletedMovie)) {
+                outputWriter.write();
             }
         }
     }
@@ -64,6 +111,7 @@ public class Execution {
                 currentPage.setUser(null);
                 currentPage.setMovie(null);
                 currentPage.setMovies(null);
+                prevPages.clear();
             } else {
                 outputWriter.write();
             }
@@ -88,6 +136,7 @@ public class Execution {
 
         private void homepage() {
             if (currentPage.hasLinkTo("homepage")) {
+                prevPages.saveState(currentPage);
                 currentPage.setType("homepage");
                 currentPage.setMovie(null);
                 currentPage.setMovies(null);
@@ -98,6 +147,7 @@ public class Execution {
 
         private void movies() {
             if (currentPage.hasLinkTo("movies")) {
+                prevPages.saveState(currentPage);
                 currentPage.setType("movies");
                 currentPage.setMovie(null);
                 final List<Movie> currentMovies = MovieList.available(
@@ -114,6 +164,7 @@ public class Execution {
                 final Optional<Movie> currentMovie = MovieList.getMovie(
                         currentPage.getMovies(), movieName);
                 if (currentMovie.isPresent()) {
+                    prevPages.saveState(currentPage);
                     currentPage.setType("see details");
                     currentPage.setMovie(currentMovie.get());
                     outputWriter.write(List.of(currentMovie.get()), currentPage.getUser());
@@ -127,6 +178,7 @@ public class Execution {
 
         private void upgrades() {
             if (currentPage.hasLinkTo("upgrades")) {
+                prevPages.saveState(currentPage);
                 currentPage.setType("upgrades");
                 currentPage.setMovie(null);
             } else {
@@ -220,10 +272,12 @@ public class Execution {
 
         private void watch() {
             if (currentPage.hasFeature("watch")) {
-                if (currentPage.getUser().watchMovie(currentPage.getMovie())) {
-                    outputWriter.write(List.of(currentPage.getMovie()), currentPage.getUser());
-                    return;
+                switch (currentPage.getUser().watchMovie(currentPage.getMovie())) {
+                    case 1 -> outputWriter.write(List.of(currentPage.getMovie()), currentPage.getUser());
+                    case -1 -> outputWriter.write();
+                    default -> { }
                 }
+                return;
             }
             outputWriter.write();
         }
@@ -242,6 +296,15 @@ public class Execution {
             if (currentPage.hasFeature("rate")) {
                 if (currentPage.getUser().rateMovie(currentPage.getMovie(), rate)) {
                     outputWriter.write(List.of(currentPage.getMovie()), currentPage.getUser());
+                    return;
+                }
+            }
+            outputWriter.write();
+        }
+
+        private void subscribe(final String genreName) {
+            if (currentPage.hasFeature("subscribe")) {
+                if (currentPage.getUser().subscribeMovie(currentPage.getMovie(), genreName)) {
                     return;
                 }
             }

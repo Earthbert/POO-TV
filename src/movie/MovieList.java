@@ -1,13 +1,13 @@
 package movie;
 
+import database.Database;
 import user.User;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public final class MovieList {
-    private MovieList() { }
+    private MovieList() {
+    }
 
     /**
      * Return available movies to a specific user.
@@ -34,6 +34,8 @@ public final class MovieList {
      * @return new list
      */
     public static List<Movie> copyMovies(final List<Movie> movies) {
+        if (movies == null)
+            return null;
         final ArrayList<Movie> copiedMovies = new ArrayList<>();
         for (final Movie movie : movies) {
             copiedMovies.add(new Movie(movie));
@@ -45,7 +47,7 @@ public final class MovieList {
      * Get a movie from Movie list by name.
      *
      * @param movies Movie List
-     * @param name name of movie
+     * @param name   name of movie
      * @return movie
      */
     public static Optional<Movie> getMovie(final List<Movie> movies, final String name) {
@@ -54,7 +56,8 @@ public final class MovieList {
 
     /**
      * Search through a Movie list.
-     * @param movies Movie list
+     *
+     * @param movies    Movie list
      * @param startWith String that must at the start of the Movie name
      * @return searched Movie list
      */
@@ -66,5 +69,33 @@ public final class MovieList {
             }
         }
         return matchingMovies;
+    }
+
+    public static Movie generateRecommandation(final User user) {
+        final TreeMap<String, Integer> genreLikes = new TreeMap<>();
+        for (final Movie movie : user.getLikedMovies()) {
+            movie.getGenres().forEach(x -> {
+                genreLikes.put(x, genreLikes.getOrDefault(x, 0));
+            });
+        }
+
+        final List<String> sortedGenres = genreLikes.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue())
+                .sorted(Map.Entry.comparingByKey())
+                .map(Map.Entry::getKey).toList();
+
+        final List<Movie> moviesSorted = Database.getInstance().getMovies().stream()
+                .sorted(Comparator.comparing(Movie::getNumLikes))
+                .toList();
+
+        for (final String genre : sortedGenres) {
+            final Optional<Movie> recommendedMovie = moviesSorted.stream()
+                    .filter(x -> x.getGenres().contains(genre) && !user.getWatchedMovies().contains(x))
+                    .findFirst();
+            if (recommendedMovie.isPresent()) {
+                return recommendedMovie.get();
+            }
+        }
+        return null;
     }
 }

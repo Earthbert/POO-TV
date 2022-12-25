@@ -3,6 +3,7 @@ package action;
 import action.filter.Filter;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import movie.Movie;
 import user.Credentials;
 
 public final class Action {
@@ -15,6 +16,9 @@ public final class Action {
     private final int count;
     private final String startsWith;
     private final int rate;
+    private final Movie addedMovie;
+    private final String deletedMovie;
+    private final String subscribedGenre;
 
     @JsonCreator
     private Action(@JsonProperty("type") final String type,
@@ -25,7 +29,10 @@ public final class Action {
                    @JsonProperty("movie") final String movies,
                    @JsonProperty("count") final int count,
                    @JsonProperty("startsWith") final String startsWith,
-                   @JsonProperty("rate") final int rate) {
+                   @JsonProperty("rate") final int rate,
+                   @JsonProperty("addedMovie") final Movie addedMovie,
+                   @JsonProperty("deletedMovie") final String deletedMovie,
+                   @JsonProperty("subscribedGenre") final String subscribedGenre) {
         this.type = type;
         this.page = page;
         this.feature = feature;
@@ -35,6 +42,9 @@ public final class Action {
         this.count = count;
         this.startsWith = startsWith;
         this.rate = rate;
+        this.addedMovie = addedMovie;
+        this.deletedMovie = deletedMovie;
+        this.subscribedGenre = subscribedGenre;
     }
 
     public String getType() {
@@ -71,5 +81,17 @@ public final class Action {
 
     public int getRate() {
         return rate;
+    }
+
+    public Movie getAddedMovie() {
+        return addedMovie;
+    }
+
+    public String getDeletedMovie() {
+        return deletedMovie;
+    }
+
+    public String getSubscribedGenre() {
+        return subscribedGenre;
     }
 }

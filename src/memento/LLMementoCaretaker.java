@@ -3,7 +3,7 @@ package memento;
 import java.util.*;
 
 // MementoCareTaker List Implementation
-public class LLMementoCareTaker<K, T> implements MementoCareTaker<K, T> {
+public class LLMementoCaretaker<K, T> implements MementoCaretaker<K, T> {
     List<IdentifierAndState<K, T>> stateList = new ArrayList<>();
 
     @Override
@@ -23,6 +23,7 @@ public class LLMementoCareTaker<K, T> implements MementoCareTaker<K, T> {
                 .filter(x -> x.identifier.equals(identifier)).findFirst();
         if (ret.isPresent()) {
             targetObject.restoreState(ret.get().state);
+            stateList.subList(stateList.indexOf(ret.get()), stateList.size() - 1).clear();
             return true;
         }
         return false;
@@ -32,6 +33,7 @@ public class LLMementoCareTaker<K, T> implements MementoCareTaker<K, T> {
     public boolean restoreLastState(final Memento<T> targetObject) {
         if (!stateList.isEmpty()) {
             targetObject.restoreState(stateList.get(stateList.size() - 1).state);
+            stateList.remove(stateList.size() - 1);
             return true;
         }
         return false;

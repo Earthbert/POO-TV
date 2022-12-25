@@ -2,13 +2,13 @@ package movie;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import observer.Subject;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
-public final class Movie {
+public final class Movie extends Subject {
     private final String name;
-    private final int year;
+    private final String year;
     private final int duration;
     private final ArrayList<String> genres;
     private final ArrayList<String> actors;
@@ -19,7 +19,7 @@ public final class Movie {
 
     @JsonCreator
     private Movie(@JsonProperty("name") final String name,
-                  @JsonProperty("year") final int year,
+                  @JsonProperty("year") final String year,
                   @JsonProperty("duration") final int duration,
                   @JsonProperty("genres") final ArrayList<String> genres,
                   @JsonProperty("actors") final ArrayList<String> actors,
@@ -70,9 +70,13 @@ public final class Movie {
     /**
      * Called when a movie receives a rating.
      */
-    public void rate(final int rate) {
-        ratingSum += rate;
+    public void rate(final int rating) {
+        ratingSum += rating;
         numRatings++;
+    }
+
+    public void rateAgain(final int rating, final int prevRating) {
+        ratingSum += rating - prevRating;
     }
 
     /**
@@ -98,7 +102,7 @@ public final class Movie {
         return name;
     }
 
-    public int getYear() {
+    public String getYear() {
         return year;
     }
 

@@ -1,6 +1,7 @@
 package user;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public final class Credentials {
@@ -39,7 +40,8 @@ public final class Credentials {
         return true;
     }
 
-    boolean isPremium() {
+    @JsonIgnore
+    public boolean isPremium() {
         return accountType.equals("premium");
     }
 

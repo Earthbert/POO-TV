@@ -53,7 +53,7 @@ public final class Page implements Memento<Page> {
         // Movie details page
         PAGE_PROP.put("see details", new Proprieties(
                 List.of("homepage", "movies", "upgrades", "logout"),
-                List.of("purchase", "watch", "like", "rate")));
+                List.of("purchase", "watch", "like", "rate", "subscribe")));
         // Upgrades page
         PAGE_PROP.put("upgrades", new Proprieties(
                 List.of("homepage", "movies", "logout"),
