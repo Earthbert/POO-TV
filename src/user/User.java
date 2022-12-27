@@ -102,7 +102,7 @@ public final class User implements Observer {
     /**
      * Make this user watch Movie.
      * @param movie Movie
-     * @return Return true if action was successful, false otherwise.
+     * @return Returns -1 is user doesn't own the movie, 1 if this is the first time watching it and 0 otherwise.
      */
     public int watchMovie(final Movie movie) {
         if (!purchasedMovies.contains(movie)) {
@@ -183,6 +183,11 @@ public final class User implements Observer {
                     this.numFreePremiumMovies++;
                 } else {
                     this.credentials.spendBalance(-MOVIE_COST);
+                }
+                if (this.credentials.isPremium()) {
+                    numFreePremiumMovies++;
+                } else {
+                    tokensCount += MOVIE_COST;
                 }
                 purchasedMovies.remove((Movie) subject);
                 watchedMovies.remove((Movie) subject);

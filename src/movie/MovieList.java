@@ -74,9 +74,7 @@ public final class MovieList {
     public static Movie generateRecommendation(final User user) {
         final TreeMap<String, Integer> genreLikes = new TreeMap<>();
         for (final Movie movie : user.getLikedMovies()) {
-            movie.getGenres().forEach(x -> {
-                genreLikes.put(x, genreLikes.getOrDefault(x, 0));
-            });
+            movie.getGenres().forEach(x -> genreLikes.put(x, genreLikes.getOrDefault(x, 0)));
         }
 
         final List<String> sortedGenres = genreLikes.entrySet().stream()
