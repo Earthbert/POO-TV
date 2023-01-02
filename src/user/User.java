@@ -104,15 +104,14 @@ public final class User implements Observer {
      * @param movie Movie
      * @return Returns -1 is user doesn't own the movie, 1 if this is the first time watching it and 0 otherwise.
      */
-    public int watchMovie(final Movie movie) {
+    public boolean watchMovie(final Movie movie) {
         if (!purchasedMovies.contains(movie)) {
-            return -1;
+            return false;
         }
         if (!watchedMovies.contains(movie)) {
             watchedMovies.add(movie);
-            return 1;
         }
-        return 0;
+        return true;
     }
 
     /**

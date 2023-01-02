@@ -40,7 +40,6 @@ public class Execution {
             switch (action.getType()) {
                 case "change page" -> changePageAction.handle(action);
                 case "on page" -> onPageAction.handle(action);
-                case "subscribe" -> onPageAction.subscribe(action.getSubscribedGenre());
                 case "database" -> databaseAction.handle(action);
                 case "back" -> rollbackPage();
                 default -> System.err.println("Invalid Action");
@@ -198,6 +197,7 @@ public class Execution {
                 case "watch" -> watch();
                 case "like" -> like();
                 case "rate" -> rate(action.getRate());
+                case "subscribe" -> subscribe(action.getSubscribedGenre());
                 case "buy premium account" -> buyPremium();
                 case "buy tokens" -> buyTokens(action.getCount());
                 default -> System.err.println("Invalid On Page Action");
@@ -272,10 +272,8 @@ public class Execution {
 
         private void watch() {
             if (currentPage.hasFeature("watch")) {
-                switch (currentPage.getUser().watchMovie(currentPage.getMovie())) {
-                    case 1 -> outputWriter.write(List.of(currentPage.getMovie()), currentPage.getUser());
-                    case -1 -> outputWriter.write();
-                    default -> { }
+                if (currentPage.getUser().watchMovie(currentPage.getMovie())) {
+                    outputWriter.write(List.of(currentPage.getMovie()), currentPage.getUser());
                 }
                 return;
             }
