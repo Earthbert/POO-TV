@@ -4,7 +4,7 @@ import action.Action;
 import action.filter.Filter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import database.Database;
-import memento.MementoCaretakeFactory;
+import memento.MementoCaretakerFactory;
 import memento.MementoCaretaker;
 import movie.Movie;
 import movie.MovieList;
@@ -24,7 +24,7 @@ public class Execution {
     private final OnPageAction onPageAction = new OnPageAction();
     private final DatabaseAction databaseAction = new DatabaseAction();
 
-    private final MementoCaretaker<String, Page> prevPages = MementoCaretakeFactory.create();
+    private final MementoCaretaker<String, Page> prevPages = MementoCaretakerFactory.create();
 
     public Execution(final ArrayNode arrayNode) {
         currentPage = new Page("logout");
@@ -274,8 +274,8 @@ public class Execution {
             if (currentPage.hasFeature("watch")) {
                 if (currentPage.getUser().watchMovie(currentPage.getMovie())) {
                     outputWriter.write(List.of(currentPage.getMovie()), currentPage.getUser());
+                    return;
                 }
-                return;
             }
             outputWriter.write();
         }

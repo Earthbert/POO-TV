@@ -102,7 +102,8 @@ public final class User implements Observer {
     /**
      * Make this user watch Movie.
      * @param movie Movie
-     * @return Returns -1 is user doesn't own the movie, 1 if this is the first time watching it and 0 otherwise.
+     * @return Returns -1 is user doesn't own the movie, 1
+     * if this is the first time watching it and 0 otherwise.
      */
     public boolean watchMovie(final Movie movie) {
         if (!purchasedMovies.contains(movie)) {
@@ -150,6 +151,12 @@ public final class User implements Observer {
         return false;
     }
 
+    /**
+     * Make user subscribe to a genre.
+     * @param movie movie
+     * @param genreName genre name
+     * @return true if subscription was successful, false otherwise
+     */
     public boolean subscribeMovie(final Movie movie, final String genreName) {
         if (movie.getGenres().contains(genreName)) {
             return Database.getInstance().subscribeToGenre(this, genreName);
@@ -157,6 +164,9 @@ public final class User implements Observer {
         return false;
     }
 
+    /**
+     * Receive a movie recommendation based on subscribed genres.
+     */
     public void getRecommendation() {
         final Movie movie = MovieList.generateRecommendation(this);
         if (movie != null) {
@@ -166,6 +176,11 @@ public final class User implements Observer {
         notifications.add(new Notification("Recommendation", "No recommendation"));
     }
 
+    /**
+     * Get notified of changes to the database.
+     * @param subject subject
+     * @param args information about update
+     */
     @Override
     public void update(final Subject subject, final Object... args) {
         switch ((UserUpdates) args[0]) {
@@ -194,6 +209,7 @@ public final class User implements Observer {
                 ratedMovies.remove((Movie) subject);
                 notifications.add(new Notification("DELETE", ((Movie) subject).getName()));
             }
+            default -> { }
         }
     }
 

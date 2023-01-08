@@ -37,6 +37,11 @@ public final class Database {
         return INSTANCE.get();
     }
 
+    /**
+     * Add a movie to the database
+     * @param movie movie to be added
+     * @return true if movie was added to the database, false otherwise
+     */
     public boolean addMovie(final Movie movie) {
         if (!movies.contains(movie)) {
             genreSubscriptions.stream()
@@ -48,6 +53,11 @@ public final class Database {
         return false;
     }
 
+    /**
+     * Delete a movie from the database
+     * @param movieName name of movie to be deleted
+     * @return true if movie was deleted, false otherwise
+     */
     public boolean deleteMovie(final String movieName) {
         final Optional<Movie> movieOptional = movies.stream()
                 .filter(x -> x.getName().equals(movieName)).findFirst();
@@ -59,6 +69,13 @@ public final class Database {
         return false;
     }
 
+    /**
+     * Subscribe a user to a genre.
+     * Adds user as an observer of GenreSubscription.
+     * @param user subscriber
+     * @param genreName genre Name
+     * @return true if subscription was successful, false otherwise
+     */
     public boolean subscribeToGenre(final User user, final String genreName) {
         final Optional<GenreSubscription> genre = genreSubscriptions.stream()
                 .filter(x -> x.getName().equals(genreName)).findFirst();

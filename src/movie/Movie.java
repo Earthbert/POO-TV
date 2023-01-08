@@ -69,12 +69,18 @@ public final class Movie extends Subject {
 
     /**
      * Called when a movie receives a rating.
+     * @param rating rating
      */
     public void rate(final int rating) {
         ratingSum += rating;
         numRatings++;
     }
 
+    /**
+     * Called when a movie receives a new rating.
+     * @param rating rating
+     * @param prevRating previous rating
+     */
     public void rateAgain(final int rating, final int prevRating) {
         ratingSum += rating - prevRating;
     }

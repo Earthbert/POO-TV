@@ -34,8 +34,9 @@ public final class MovieList {
      * @return new list
      */
     public static List<Movie> copyMovies(final List<Movie> movies) {
-        if (movies == null)
+        if (movies == null) {
             return null;
+        }
         final ArrayList<Movie> copiedMovies = new ArrayList<>();
         for (final Movie movie : movies) {
             copiedMovies.add(new Movie(movie));
@@ -71,6 +72,11 @@ public final class MovieList {
         return matchingMovies;
     }
 
+    /**
+     * Generates recommendation for a user.
+     * @param user user
+     * @return recommend movie, or null no recommendation was found
+     */
     public static Movie generateRecommendation(final User user) {
         final TreeMap<String, Integer> genreLikes = new TreeMap<>();
         for (final Movie movie : user.getLikedMovies()) {
